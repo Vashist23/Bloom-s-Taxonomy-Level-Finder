@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom's Taxonomy Level Finder</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1{
+            color: rgb(96, 203, 167);
+        }
+
+        #questionInput{
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button{
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        buton:hover{
+            background-color: aqua;
+        
+        }
+
+        #resultTable{
+            width:100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #resultTable th
+        #resultTable td{
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #resultTable th{
+            background-color: #4caf50;
+            color:white;
+        }
+
+        #resultTable tr:nth-child(even){
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        function findBloomsLevel(question) {
+            // Define keywords in a dictionary format
+            const keywordLists = {
+        'remember': ['choose','define','find','how','label','list','match','name','omit','recall','.select','show','spell','tell','what','when','where','which','who','why'],
+        'understand': ['classify','demonstrate','explain','extend','illustrate','infer','interpret','outline','relate','rephrase','translate', 'describe', 'summarize'],
+        'apply': ['use', 'apply', 'solve','build','construct','develop','experimentwith','identify','interview','makeuseof','model','organize','plan','solve','utilize'],
+        'analyze': ['analyze','assume','categorize','conclusion','discover','dissect','distinguish','divide','examine','function','inference','inspect','motive','relationship','simplify','survey','takepartin','testfor','theme', 'compare', 'contrast'],
+        'evaluate': ['evaluate', 'judge', 'assess','appraise','award','choose','conclude','criteria','criticize','decide','deduct','defend','determine','disprove','estimate','importance','influence','justify','mark','measure','opinion','perceive','prioritize','prove','rate','recommend','ruleon','select','support','value'],
+        'create': ['create', 'design', 'compose','adapt','change','combine','compile','delete','discuss','elaborate','formulate','happen','imagine','improve','invent','makeup','maximize','minimize','modify','original','originate','predict','propose','solution','suppose','test','theory3']
+
+            };
+
+            // Assign ascending preference values to Bloom's Taxonomy levels
+            const taxonomyPreferences = {
+                'remember': 1,
+                'understand': 2,
+                'apply': 3,
+                'analyze': 4,
+                'evaluate': 5,
+                'create': 6
+            };
+
+            // Initialize a dictionary to store the total preference values for each Bloom's Taxonomy level
+            const levelPreferences = {};
+            for (const level in taxonomyPreferences) {
+                levelPreferences[taxonomyPreferences[level]] = 0;
+            }
+
+ // Check each keyword in the question and update the corresponding Bloom's Taxonomy level preference value
+for (const [level, keywords] of Object.entries(keywordLists)) {
+    for (const keyword of keywords) {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+        if (regex.test(question)) {
+            levelPreferences[taxonomyPreferences[level]] += 1;
+        }
+    }
+}
+
+
+            // Prioritize "understand" level when both "remember" and "understand" keywords are present
+            // Assuming level_preferences and taxonomy_preferences are defined elsewhere
+            function prioritizeLevel() {
+                // Your prioritization logic here
+            }
+
+            // Call the function
+            const result = prioritizeLevel();
+
+            // Find the Bloom's Taxonomy level with the highest preference value
+            const maxPreferenceLevel = Object.keys(levelPreferences).reduce((a, b) => levelPreferences[a] > levelPreferences[b] ? a : b);
+
+            return maxPreferenceLevel;
+        }
+
+        // Function to handle input and display result
+        function handleInput() {
+            const inputElement = document.getElementById("questionInput");
+            const question = inputElement.value;
+
+            // Prompt the user for the module name
+            const moduleName = prompt("Enter the Module Name:");
+
+            // Check if the user entered a module name
+            if (moduleName !== null && moduleName.trim() !== "") {
+                // Create a new row for the table
+                const table = document.getElementById("resultTable");
+                const newRow = table.insertRow(-1);
+
+                // Insert cells with data
+                const cell1 = newRow.insertCell(0);
+                const cell2 = newRow.insertCell(1);
+                const cell3 = newRow.insertCell(2);
+                const cell4 = newRow.insertCell(3);
+                const cell5 = newRow.insertCell(4);
+
+                // Set cell values
+                cell1.textContent = table.rows.length - 1; // Serial Number
+                cell2.textContent = question; // Question
+                cell3.textContent = findBloomsLevel(question); // Bloom's Taxonomy Level
+                cell4.textContent = moduleName; // Module Name
+                cell5.textContent =Marks;
+            } else {
+                alert("Please enter a valid Module Name.");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Bloom's Taxonomy Level Finder</h1>
+    <label for="questionInput">Enter the question:</label>
+    <input type="text" id="questionInput" placeholder="Type your question here">
+    <button onclick="handleInput()">Submit</button>
+
+    <!-- Result Table -->
+    <table id="resultTable" border="1">
+        <tr>
+            <th>S No.</th>
+            <th>Question</th>
+            <th>BT Level</th>
+            <th>Module Name</th>
+            <th>Marks</th>
+        </tr>
+        <!-- Existing or dynamically added rows will go here -->
+    </table>
+</body>
+
+</html>
